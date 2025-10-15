@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blend It - Fresh Smoothies & Juices</title>
+    <!-- Tab Icon (Favicon) -->
+    <link rel="icon" href="assets/logo.png">
+    <!-- Google Fonts for a fresh, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Color Palette & Global Styles */
+        :root {
+            --fresh-green: #55a630;
+            --sunshine-yellow: #fecf3a;
+            --tangerine-orange: #f5882f;
+            --light-cream: #f8f9fa;
+            --dark-text: #344e41;
+            --glass-white: rgba(255, 255, 255, 0.15);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
+            overflow-x: hidden;
+            background: var(--light-cream);
+        }
+        
+        /* Floating Navbar with Glassmorphism Effect */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-white);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 15px 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        nav.scrolled {
+            top: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Pacifico', cursive;
+            font-size: 32px;
+            background: linear-gradient(45deg, var(--fresh-green), var(--tangerine-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.4s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px rgba(85, 166, 48, 0.4));
+        }
+        
+        nav.scrolled .logo {
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--fresh-green);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-links a:hover {
+            color: var(--fresh-green);
+        }
+
+        .nav-links a:hover::after {
+            width: 60%;
+        }
+        
+        .order-btn {
+            background: linear-gradient(45deg, var(--tangerine-orange), var(--sunshine-yellow));
+            color: white !important;
+            padding: 10px 28px !important;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(245, 136, 47, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .order-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(245, 136, 47, 0.35);
+            filter: brightness(1.1);
+            color: white !important;
+        }
+        
+        .order-btn:hover::after {
+            display: none;
+        }
+        
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark-text);
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--sunshine-yellow) 0%, var(--fresh-green) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px; /* Offset for navbar */
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 0 20px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            color: white;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--fresh-green);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: var(--fresh-green);
+        }
+        
+        /* Floating Fruit Elements */
+        .floating-element {
+            position: absolute;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.15;
+            font-size: 4rem;
+            user-select: none;
+        }
+        
+        .floating-element:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; font-size: 5rem;}
+        .floating-element:nth-child(2) { top: 65%; right: 15%; animation-delay: 2s; font-size: 4rem;}
+        .floating-element:nth-child(3) { bottom: 15%; left: 20%; animation-delay: 4s; font-size: 6rem;}
+        .floating-element:nth-child(4) { top: 40%; right: 5%; animation-delay: 1s; font-size: 3rem;}
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(15deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Section Styling */
+        section {
+            padding: 120px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            color: var(--fresh-green);
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '🍓';
+            position: absolute;
+            top: -25px;
+            right: 50%;
+            transform: translateX(50%);
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .about-text h3 {
+            font-size: 2.2rem;
+            color: var(--tangerine-orange);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            height: 400px;
+        }
+        
+        /* Menu Section */
+        .menu {
+            background: var(--light-cream);
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--fresh-green);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .menu-item h4 {
+            font-size: 1.5rem;
+            color: var(--tangerine-orange);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .menu-item .price {
+            font-size: 1.3rem;
+            color: var(--fresh-green);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .menu-item p {
+            color: var(--dark-text);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .menu-item .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            background: #e9f5db;
+            color: var(--fresh-green);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Location Section */
+        #location {
+            background: #fff;
+        }
+        
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .location-info h3 {
+            font-size: 2rem;
+            color: var(--tangerine-orange);
+            margin-bottom: 30px;
+        }
+        
+        .hours {
+            background: var(--light-cream);
+            padding: 30px;
+            border-radius: 20px;
+        }
+        
+        .hours h4 {
+            color: var(--fresh-green);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .hours-list { list-style: none; }
+        
+        .hours-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+        
+        .hours-list li:last-child { border-bottom: none; }
+        
+        .location-content iframe {
+            width: 100%;
+            height: 450px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        
+        /* Reviews Section */
+        .reviews {
+            background: linear-gradient(135deg, var(--fresh-green) 0%, var(--sunshine-yellow) 100%);
+        }
+        
+        .reviews .section-title { color: white; }
+        .reviews .section-title::after { content: '💬';}
+        
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .stars {
+            color: var(--sunshine-yellow);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .review-text {
+            font-style: italic;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .reviewer {
+            font-weight: 600;
+            color: var(--fresh-green);
+        }
+        
+        /* Photo Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            border-radius: 18px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(85, 166, 48, 0.2);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .social-links a {
+            color: white;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links a:hover {
+            background: var(--fresh-green);
+            transform: translateY(-5px);
+        }
+
+        .social-links i {
+            font-size: 22px;
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content,
+            .location-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .location-content {
+                grid-template-rows: auto auto;
+            }
+
+            .location-content iframe {
+                /* Ensure map is rendered after info on mobile */
+                grid-row: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                width: 95%;
+                padding: 10px 20px;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: white;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.4s ease-in-out;
+                gap: 40px;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .hamburger {
+                display: flex;
+                z-index: 1001;
+            }
+        }
+        
+        /* Loader Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--fresh-green);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-icon {
+            font-size: 5rem;
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pre-loader -->
+    <div class="loader" id="loader">
+        <div class="loader-icon">🥤</div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">Blend It</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Our Story</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#location">Find Us</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="https://blenditme.com" target="_blank" class="order-btn">Order Online</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Floating fruit emojis for a playful effect -->
+        <div class="floating-element">🍓</div>
+        <div class="floating-element">🍌</div>
+        <div class="floating-element">🥝</div>
+        <div class="floating-element">🥤</div>
+        
+        <div class="hero-content">
+            <h1>Sip, Smile, Repeat.</h1>
+            <p>Deliciously Fresh Smoothies & Juices Made With Love</p>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-primary">See Our Menu</a>
+                <a href="#location" class="btn btn-secondary">Visit Us Today</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">Our Fresh Story</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>From a Passion for Health to Your Daily Blend</h3>
+                    <p>Blend It started with a simple idea: making healthy choices should be easy and delicious. We got tired of searching for fresh, natural options that weren't loaded with sugar and artificial ingredients. So, we decided to create our own!</p>
+                    <p>We source the freshest fruits and vegetables from local farms whenever possible. Every smoothie and juice on our menu is crafted with care, taste-tested to perfection, and designed to give you a natural boost of energy and nutrition.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://placehold.co/600x450/a7c957/ffffff?text=Our+Happy+Blenders" alt="Happy staff making smoothies">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <h2 class="section-title">Taste the Goodness</h2>
+            <div class="menu-grid">
+                <!-- Menu Item 1 -->
+                <div class="menu-item">
+                    <h4>Green Machine</h4>
+                    <p class="price">$7.50</p>
+                    <p>Our signature detox blend. Spinach, kale, green apple, banana, and a splash of almond milk to get you going.</p>
+                    <div class="tags">
+                        <span class="tag">Detox</span>
+                        <span class="tag">Fan Favorite</span>
+                    </div>
+                </div>
+                <!-- Menu Item 2 -->
+                <div class="menu-item">
+                    <h4>Berry Bliss</h4>
+                    <p class="price">$8.00</p>
+                    <p>A delicious mix of strawberries, blueberries, raspberries, and greek yogurt for a protein-packed treat.</p>
+                    <div class="tags">
+                        <span class="tag">High Protein</span>
+                        <span class="tag">Antioxidants</span>
+                    </div>
+                </div>
+                <!-- Menu Item 3 -->
+                <div class="menu-item">
+                    <h4>Tropical Tango</h4>
+                    <p class="price">$7.75</p>
+                    <p>Escape to paradise with this blend of mango, pineapple, passion fruit, and a hint of coconut water.</p>
+                    <div class="tags">
+                        <span class="tag">Refreshing</span>
+                        <span class="tag">Vegan</span>
+                    </div>
+                </div>
+                <!-- Menu Item 4 -->
+                <div class="menu-item">
+                    <h4>Sunshine Squeeze</h4>
+                    <p class="price">$7.00</p>
+                    <p>A bright and zesty juice made from fresh oranges, carrots, and a touch of ginger to awaken your senses.</p>
+                    <div class="tags">
+                        <span class="tag">Immunity Boost</span>
+                        <span class="tag">Fresh Juice</span>
+                    </div>
+                </div>
+                <!-- Menu Item 5 -->
+                <div class="menu-item">
+                    <h4>Peanut Butter Power</h4>
+                    <p class="price">$8.50</p>
+                    <p>The perfect post-workout fuel with banana, natural peanut butter, chocolate protein, and oat milk.</p>
+                    <div class="tags">
+                        <span class="tag">Workout Fuel</span>
+                        <span class="tag">High Protein</span>
+                    </div>
+                </div>
+                <!-- Menu Item 6 -->
+                <div class="menu-item">
+                    <h4>Build Your Own</h4>
+                    <p class="price">Starting at $6.50</p>
+                    <p>Choose your base, pick up to 3 fruits or veggies, and add your favorite boosters. Your perfect blend awaits!</p>
+                    <div class="tags">
+                        <span class="tag">Customizable</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location" id="location">
+        <div class="container">
+            <h2 class="section-title">Find Your Fresh Fix</h2>
+            <div class="location-content">
+                <div class="location-info">
+                    <h3>📍 8 Main St, Gorham, ME 04038</h3>
+                    <div class="hours">
+                        <h4>🕐 Opening Hours</h4>
+                        <ul class="hours-list">
+                            <li><span>Monday - Sunday</span><span>9:00 AM - 7:00 PM</span></li>
+                        </ul>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 1.1rem;">
+                        <strong>Phone:</strong> (207) 222-0088<br>
+                        <strong>Email:</strong> blenditmaine@gmail.com
+                    </p>
+                </div>
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2873.351239638363!2d-70.4452836844933!3d43.6815349791203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cb29524f2482379%3A0x62725e22722b5683!2s8%20Main%20St%2C%20Gorham%2C%20ME%2004038!5e0!3m2!1sen!2sus!4v1668816434421!5m2!1sen!2sus" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <h2 class="section-title">What Our Friends Say</h2>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"The Green Machine is my go-to every morning! So fresh and gives me the perfect boost to start my day. The staff is always so friendly!"</p>
+                    <p class="reviewer">- Jessica P.</p>
+                </div>
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"Finally, a smoothie place that uses real, fresh ingredients. You can taste the quality. The Berry Bliss is to die for. Highly recommend!"</p>
+                    <p class="reviewer">- Mark T.</p>
+                </div>
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"My kids love building their own smoothies, and I love that it's healthy! A total win-win for our family. We're here at least twice a week."</p>
+                    <p class="reviewer">- Sarah L.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">A Taste of Our Vibe</h2>
+            <div class="gallery-grid">
+                <!-- Placeholder images from placehold.co -->
+                <div class="gallery-item"><img src="https://placehold.co/400x400/fca311/ffffff?text=Fresh+Smoothies" alt="Colorful smoothies"></div>
+                <div class="gallery-item"><img src="https://placehold.co/400x400/e5e5e5/344e41?text=Our+Cozy+Shop" alt="Interior of the smoothie shop"></div>
+                <div class="gallery-item"><img src="https://placehold.co/400x400/b5e48c/ffffff?text=Happy+Customers" alt="Customers enjoying their drinks"></div>
+                <div class="gallery-item"><img src="https://placehold.co/400x400/ffb703/ffffff?text=Locally+Sourced" alt="Fresh fruits and vegetables"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="social-links">
+                <!-- Font Awesome Icons -->
+                <a href="https://www.facebook.com/p/Blend-it-61574062435903/" target="_blank" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/blenditme25/" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <!-- <a href="#" target="_blank" aria-label="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a> -->
+                <a href="mailto:blenditmaine@gmail.com" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+            <p>&copy; 2025 Blend It. Spreading Freshness One Sip at a Time. 🍓</p>
+        </div>
+    </footer>
+
+    <script>
+        // Pre-loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 500); // Shorter delay
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Don't close if it's the order button, as it opens a new tab
+                if (!link.classList.contains('order-btn')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Stop observing after animation
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+
